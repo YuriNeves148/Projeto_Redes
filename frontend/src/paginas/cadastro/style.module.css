@@ -1,0 +1,38 @@
+.container {
+  background-color: rgb(151, 186, 186);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-top: 80px;
+  width: 500px;
+  border-radius: 10px;
+}
+.formulario {
+  display: flex;
+  flex-direction: column;
+
+  & label {
+    font-size: 23px;
+    padding: 4px;
+  }
+  & input {
+    font-size: 20px;
+    border-radius: 8px;
+  }
+  & button {
+    cursor: pointer;
+    font-size: 20px;
+    margin: 10px;
+    margin-bottom: 13px;
+    border-radius: 5px;
+  }
+  & button:hover {
+    opacity: 0.8;
+  }
+  & h1 {
+    display: flex;
+    margin: 0 auto;
+    padding: 10px;
+  }
+}
