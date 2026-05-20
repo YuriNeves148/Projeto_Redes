@@ -20,4 +20,11 @@ class Notificacao:
         self.tipo = tipo
         self.lida = False
         self.data_hora = datetime.now()
-        
+
+class Mensagem:
+    def __init__(self, Usuario_origem, Usuario_destino, mensagem = None):
+        self.mensagem = mensagem
+        self.Usuario_origem = Usuario_origem
+        self.Usuario_destino = Usuario_destino
+    def enviar_mensagem(self):
+        print(f"<{self.Usuario_origem}><{self.Usuario_destino}>{self.mensagem}")
