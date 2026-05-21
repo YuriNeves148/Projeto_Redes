@@ -1,10 +1,12 @@
 from datetime import datetime
+import sqlite3
 class Usuario:
-    def __init__(self, nome, nome_usuario, senha, status,  foto_perfil = None):
+    def __init__(self, nome, nome_usuario, senha, status, endereco, foto_perfil = None):
         self.nome = nome
         self.nome_usuario = nome_usuario
         self.senha = senha
         self.status = status
+        self.endereco = endereco
         self.foto_perfil = foto_perfil
 
     def trocar_nome_usuario(self, nome_novo):
@@ -22,9 +24,9 @@ class Notificacao:
         self.data_hora = datetime.now()
 
 class Mensagem:
-    def __init__(self, Usuario_origem, Usuario_destino, mensagem = None):
+    def __init__(self, Usuario_origem: Usuario, Usuario_destino: Usuario, mensagem = None):
         self.mensagem = mensagem
         self.Usuario_origem = Usuario_origem
         self.Usuario_destino = Usuario_destino
     def enviar_mensagem(self):
-        print(f"<{self.Usuario_origem}><{self.Usuario_destino}>{self.mensagem}")
+        print(f"<{self.Usuario_origem.nome_usuario}><{self.Usuario_destino.nome_usuario}>{self.mensagem}")
