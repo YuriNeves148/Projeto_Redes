@@ -5,7 +5,8 @@ import "./index.css";
 
 import Home from "../src/paginas/home";
 import Cadastro from "./paginas/cadastro";
-import Conversa from "./paginas/conversa";
+import Feed from "./paginas/feed";
+import Usuario from "./paginas/usuario";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -13,7 +14,8 @@ createRoot(document.getElementById("root")).render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/conversa" element={<Conversa />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/usuario" element={<Usuario />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
