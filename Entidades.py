@@ -7,8 +7,6 @@ class Conversa:
     def criarConversa(self):
         banco_conversa = sqlite3.connect("banco_conversa.db")
         cursor = banco_conversa.cursor()
-        cursor.execute("CREATE TABLE IF NOT EXISTS usuarios(id INTEGER PRIMARY KEY AUTOINCREMENT, usuario1_nome TEXT, usuario2_nome TEXT, UNIQUE(usuario1_nome, usuario2_nome))")
-        cursor.execute("CREATE TABLE IF NOT EXISTS mensagens(id INTEGER PRIMARY KEY AUTOINCREMENT, mensagem TEXT, conversa_id INTEGER, FOREIGN KEY (conversa_id) REFERENCES conversas(id))")
         cursor.execute("INSERT OR IGNORE INTO conversas(usuario1_nome, usuario2_nome) VALUES('"+self.usuario_origem.nome_usuario+"', '"+self.usuario_destino.nome_usuario+"')")
         banco_conversa.commit()
         banco_conversa.close()
