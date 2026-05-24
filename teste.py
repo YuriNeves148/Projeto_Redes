@@ -1,5 +1,7 @@
 from Entidades import *
+from supabase import create_client, Client
 # Importamos o gerenciador que você criou
+
 """
 Banco = sqlite3.connect("banco.db")
 cursor = Banco.cursor()
@@ -7,6 +9,11 @@ cursor.execute("CREATE TABLE IF NOT EXISTS usuarios(nome text, nome_usuario text
 cursor.execute("INSERT INTO usuarios VALUES('"+usuario1.nome+"', '"+usuario1.nome_usuario+"', '"+usuario1.endereco+"', '"+usuario1.senha+"', '"+usuario1.status+"','"+str(usuario1.foto_perfil)+"')")
 Banco.commit()
 Banco.close()"""
+
+URLprojeto = "https://ogjmbegqwxysuoqkhifx.supabase.co"
+ChaveAPI = "sb_publishable_Qj86VOmsAc6Pur1eWO9Iiw_y-EK9xfP"
+
+
 
 usuario1 = Usuario("Danilo", "Soneca", "123321", "online","aqui")
 usuario2 = Usuario("Dante", "DIARREIA EXPLOSIVA", "12313", "online","longe")
