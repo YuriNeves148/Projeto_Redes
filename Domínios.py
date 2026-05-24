@@ -17,12 +17,12 @@ class Usuario:
         self.foto_perfil = foto_perfil_nova
 
 class Notificacao:
-    def __init__(self, remetente, tipo):
-        self.remetente = remetente
-        self.tipo = tipo
+    def __init__(self, remetente, tipo, id_postagem):
+        self.remetente = remetente      # Quem comentou/curtiu
+        self.tipo = tipo                # 'COMENTARIO' ou 'CURTIDA'
+        self.id_postagem = id_postagem  # ID da postagem que recebeu a interação
         self.lida = False
-        self.data_hora = datetime.now()
-
+        
 class Mensagem:
     def __init__(self, Usuario_origem: Usuario, Usuario_destino: Usuario, mensagem = None):
         self.mensagem = mensagem
