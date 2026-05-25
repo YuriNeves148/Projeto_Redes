@@ -7,13 +7,13 @@ function Feed() {
   const usuario = useNavigate();
   const [busca, setBusca] = useState("");
   const [conteudo, setConteudo] = useState("");
-  const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState([]);
 
   useEffect(() => {
-    carregarPosts();
+    carregarPost();
   }, []);
 
-  async function carregarPosts() {
+  async function carregarPost() {
     const { data, error } = await db
       .from("post")
       .select("*")
@@ -22,7 +22,7 @@ function Feed() {
     if (error) {
       alert("Erro ao carregar o post: " + error.message);
     } else {
-      setPosts(data);
+      setPost(data);
     }
   }
 
@@ -38,9 +38,9 @@ function Feed() {
       .select("nome_usuario")
       .eq("id", userData.user.id)
       .single();
-    const { error } = await db.from("posts").insert({
+    const { error } = await db.from("post").insert({
       conteudo: conteudo,
-      usuario_id: userData.user.id,
+      id_usuario: userData.user.id,
       nome_usuario: perfil.nome_usuario,
     });
 
@@ -48,7 +48,7 @@ function Feed() {
       alert("Erro ao publicar: " + error.message);
     } else {
       setConteudo("");
-      carregarPosts();
+      carregarPost();
     }
   }
 
@@ -77,17 +77,18 @@ function Feed() {
         </div>
 
         <div className={styles.listaPosts}>
-          {posts.map((post) => (
+          {post.map((post) => (
             <div key={post.id} className={styles.post}>
               <span className={styles.nomeUsuario}>@{post.nome_usuario}</span>
               <p className={styles.conteudo}>{post.conteudo}</p>
               <span className={styles.data}>
-                {new Date(post.created_at).toLocaleDateString("pt-BR")}
+                {new Date(post.data).toLocaleString("pt-BR")}
               </span>
             </div>
           ))}
         </div>
       </div>
+      <footer>projeto de redes de computadores - UnB</footer>
     </>
   );
 }
