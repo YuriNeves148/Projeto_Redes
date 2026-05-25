@@ -1,7 +1,5 @@
-from datetime import datetime
 import mimetypes
 from supabase_client import supabase
-import sqlite3
 class Perfil:
     def __init__(self):
         self.usuario = supabase.auth.get_user() # Dados do usuário autenticado na sessão atual
