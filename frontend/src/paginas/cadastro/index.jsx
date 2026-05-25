@@ -33,6 +33,7 @@ function Cadastro() {
     }
 
     const { error } = await db.from("usuario").insert({
+      id: data.user.id,
       nome: nome,
       nome_usuario: usuario,
     });
