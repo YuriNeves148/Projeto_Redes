@@ -32,20 +32,34 @@ function Feed() {
       return;
     }
 
-    const { data: userData } = await db.auth.getUser();
-    const { data: perfil } = await db
+    const { data: userData, error: userError } = await db.auth.getUser();
+    if(userError || !userData?.user){
+      alert("Usuario não autenticado ou sessão expirada!");
+      return;
+    }
+
+    const userId = userData.user.id
+
+    const { data: perfil, error: perfilError } = await db
       .from("usuario")
       .select("nome_usuario")
-      .eq("id", userData.user.id)
+      .eq("id", userId)
       .single();
-    const { error } = await db.from("post").insert({
+
+    if(perfilError || !perfil){
+      alert("Não foi possivel encontrar o perfil do usuario.");
+      console.error("Erro ao buscar perfil:", perfilError);
+      return;
+    }
+
+    const { error: insertError } = await db.from("post").insert({
       conteudo: conteudo,
-      id_usuario: userData.user.id,
+      id_usuario: userId,
       nome_usuario: perfil.nome_usuario,
     });
 
-    if (error) {
-      alert("Erro ao publicar: " + error.message);
+    if (insertError) {
+      alert("Erro ao publicar: " + insertError.message);
     } else {
       setConteudo("");
       carregarPost();
