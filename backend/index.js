@@ -1,8 +1,10 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
@@ -12,7 +14,7 @@ const io = new Server(httpServer, {
     }
 });
 
-const PORTA = process.env.PORT || 3000;
+const PORTA = globalThis.process?.env?.PORT || process.env.PORT || 3000;
 
 let usuariosConectados = {};
 
