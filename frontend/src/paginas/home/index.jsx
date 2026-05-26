@@ -4,7 +4,9 @@ import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io('projetoredes-production.up.railway.app', {
+  transports: ['websocket']
+});
 
 function Home() {
   const feed = useNavigate();

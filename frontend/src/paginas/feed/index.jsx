@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { db } from "../../supabase.js";
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+const socket = io('projetoredes-production.up.railway.app', {
+  transports: ['websocket']
+});
 
 function Feed() {
   const usuario = useNavigate();
