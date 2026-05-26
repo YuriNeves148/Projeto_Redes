@@ -1,37 +1,38 @@
-// TELA DE PERFIL DE USUÁRIO
 // url: https://ocyahlkdiheciktiqjdj.supabase.co
 
 import styles from "./style.module.css";
+import foto_padrao from "../../assets/imagem/foto_padrao.png";
 
 function Usuario() {
   return (
     <>
-      <div className="atual">
-        <img src="./assets/imagem/perfil.jpg" />
-        <label>nome do usuario</label>
-        <label>nome</label>
-        <label>senha atual</label>
-      </div>
+      <div className={styles.container}>
+        <div className={styles.containerAtual}>
+          <div className={styles.atual}>
+            <img src={foto_padrao} />
+            <label>nome do usuario</label>
+            <label>nome</label>
+            <label>forma de contato</label>
+            <label>senha atual</label>
+          </div>
+        </div>
+        <div className={styles.containerEditar}>
+          <div className={styles.editar}>
+            <img src={foto_padrao} />
 
-      <div className="editar">
-        <img src="./assets/imagem/perfil.jpg" />
+            <input placeholder="alterar nome de usuario (visível para outros usuários ao publicar)"></input>
 
-        <input
-          placeholder="alterar nome de usuario"
-          name="nome_usuario_novo"
-        ></input>
-        <button type="button" name="botao_nome_usuario">
-          alterar nome de usuário
-        </button>
-        <input placeholder="alterar nome" name="nome_novo"></input>
-        <button type="button" name="botao_nome">
-          alterar nome
-        </button>
-        <input placeholder="alterar senha" name="senha_nova1"></input>
-        <input
-          placeholder="digite novamente sua senha"
-          name="senha_nova2"
-        ></input>
+            <input placeholder="alterar nome"></input>
+
+            <input placeholder="adicionar forma de contato"></input>
+
+            <input placeholder="alterar senha"></input>
+
+            <input placeholder="digite novamente sua nova senha"></input>
+
+            <button>salvar alterações</button>
+          </div>
+        </div>
       </div>
     </>
   );
