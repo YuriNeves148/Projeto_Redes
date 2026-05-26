@@ -1,22 +1,22 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.0.0",
-  "homepage": "https://hdaniloh.github.io/Projeto_Redes/",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.106.1",
+    "cors": "^2.8.6",
+    "express": "^4.18.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router-dom": "^7.15.1"
+    "react-router-dom": "^7.15.1",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

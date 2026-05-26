@@ -2,12 +2,25 @@ import { useNavigate } from "react-router-dom";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { db } from "../../supabase.js";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 function Feed() {
   const usuario = useNavigate();
   const [busca, setBusca] = useState("");
   const [conteudo, setConteudo] = useState("");
   const [post, setPost] = useState([]);
+
+  useEffect(() => {
+    socket.on('receber_mensagem', (novoPost) => {
+      console.log("Nova publicação recebida:", novoPost);
+
+      setPost((postsAntigos) => [novoPost, ...postsAntigos]);
+    });
+
+    return () => socket.off('receber_mensagem');
+  }, []);
 
   useEffect(() => {
     carregarPost();
@@ -52,17 +65,20 @@ function Feed() {
       return;
     }
 
-    const { error: insertError } = await db.from("post").insert({
+    const novoPostDados = {
       conteudo: conteudo,
       id_usuario: userId,
       nome_usuario: perfil.nome_usuario,
-    });
+      data: new Date().toISOString()
+    };
+
+    const { error: insertError } = await db.from("post").insert(novoPostDados);
 
     if (insertError) {
       alert("Erro ao publicar: " + insertError.message);
     } else {
+      socket.emit('enviar_mensagem', novoPostDados);
       setConteudo("");
-      carregarPost();
     }
   }
 

@@ -1,7 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../../supabase.js";
 import styles from "./style.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:3000');
 
 function Home() {
   const feed = useNavigate();
@@ -9,13 +12,20 @@ function Home() {
   const [senha, setSenha] = useState("");
 
   async function entrar() {
-    const { error } = await db.auth.signInWithPassword({
+    const { data: authData, error } = await db.auth.signInWithPassword({
       email: email,
       password: senha,
     });
     if (error) {
       alert("Email ou senha incorreto(s)");
     } else {
+      const userId = authData?.user?.id;
+      socket.emit('usuario_online', {
+        id_usuario: userId,
+        email: email,
+        entrou_em: new Date().toISOString()
+      });
+
       feed("/feed");
     }
   }
