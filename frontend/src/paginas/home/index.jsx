@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { db } from "../../supabase.js";
 import styles from "./style.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { socket } from '../../socket.js'
 
 function Home() {
   const feed = useNavigate();
@@ -9,14 +10,48 @@ function Home() {
   const [senha, setSenha] = useState("");
 
   async function entrar() {
-    const { error } = await db.auth.signInWithPassword({
+    const { data: authData, error: authError } = await db.auth.signInWithPassword({
       email: email,
       password: senha,
     });
-    if (error) {
+    if (authError) {
+      console.error("Erro detalhado do Supabase Auth:", authError.message);
       alert("Email ou senha incorreto(s)");
-    } else {
+      return;
+    }
+
+    const userId = authData?.user?.id;
+
+    const { data: perfilData, error: perfilError } = await db
+        .from("usuario")
+        .select("nome_usuario")
+        .eq("id", userId)
+        .single();
+
+    if(perfilError) {
+      alert("Erro ao carregar dados do perfil.");
+      return;
+    }
+
+    const user_name = perfilData?.nome_usuario;
+
+    const enviarSinalOnline = () => {
+      socket.emit('usuario_online', {
+        nome_usuario: user_name,
+        id_usuario: userId,
+        email: email,
+        entrou_em: new Date().toISOString()
+      });
       feed("/feed");
+    };
+
+    if(socket.connected){
+      enviarSinalOnline();
+    } else {
+      socket.connect();
+      socket.once('connect', () => {
+        enviarSinalOnline();
+      });
     }
   }
 

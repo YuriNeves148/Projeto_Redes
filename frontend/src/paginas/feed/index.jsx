@@ -2,6 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { db } from "../../supabase.js";
+import { socket } from '../../socket.js'
 
 function Feed() {
   const usuario = useNavigate();
@@ -9,6 +10,16 @@ function Feed() {
   const [resultados, setResultados] = useState([]);
   const [conteudo, setConteudo] = useState("");
   const [post, setPost] = useState([]);
+
+  useEffect(() => {
+    socket.on('receber_mensagem', (novoPost) => {
+      console.log("Nova publicação recebida:", novoPost);
+
+      setPost((postsAntigos) => [novoPost, ...postsAntigos]);
+    });
+
+    return () => socket.off('receber_mensagem');
+  }, []);
 
   useEffect(() => {
     carregarPost();
@@ -33,23 +44,40 @@ function Feed() {
       return;
     }
 
-    const { data: userData } = await db.auth.getUser();
-    const { data: perfil } = await db
+    const { data: userData, error: userError } = await db.auth.getUser();
+    if(userError || !userData?.user){
+      alert("Usuario não autenticado ou sessão expirada!");
+      return;
+    }
+
+    const userId = userData.user.id
+
+    const { data: perfil, error: perfilError } = await db
       .from("usuario")
       .select("nome_usuario")
-      .eq("id", userData.user.id)
+      .eq("id", userId)
       .single();
-    const { error } = await db.from("post").insert({
-      conteudo: conteudo,
-      id_usuario: userData.user.id,
-      nome_usuario: perfil.nome_usuario,
-    });
 
-    if (error) {
-      alert("Erro ao publicar: " + error.message);
+    if(perfilError || !perfil){
+      alert("Não foi possivel encontrar o perfil do usuario.");
+      console.error("Erro ao buscar perfil:", perfilError);
+      return;
+    }
+
+    const novoPostDados = {
+      conteudo: conteudo,
+      id_usuario: userId,
+      nome_usuario: perfil.nome_usuario,
+      data: new Date().toISOString()
+    };
+
+    const { error: insertError } = await db.from("post").insert(novoPostDados);
+
+    if (insertError) {
+      alert("Erro ao publicar: " + insertError.message);
     } else {
+      socket.emit('enviar_mensagem', novoPostDados);
       setConteudo("");
-      carregarPost();
     }
   }
 
@@ -70,7 +98,7 @@ function Feed() {
   return (
     <>
       <header>
-        <nav>
+        <nav className={styles.barraNav}>
           <button type="button" onClick={() => usuario("/perfil")}>
             perfil
           </button>

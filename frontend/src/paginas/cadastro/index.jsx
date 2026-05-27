@@ -1,9 +1,18 @@
 import styles from "./style.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../supabase.js";
+import { socket } from '../../socket.js'
 
 function Cadastro() {
+  useEffect(() => {
+    socket.on('receber_mensagem', (dados) => {
+      console.log("Nova mensagem:", dados);
+    });
+
+    return () => socket.off('receber_mensagem');
+  }, []);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [nome, setNome] = useState("");
@@ -22,7 +31,7 @@ function Cadastro() {
       return;
     }
 
-    const { data, error: authError } = await db.auth.signUp({
+    const { data: authData, error: authError } = await db.auth.signUp({
       email: email,
       password: senha,
     });
@@ -32,15 +41,31 @@ function Cadastro() {
       return;
     }
 
-    const { error } = await db.from("usuario").insert({
-      id: data.user.id,
+    const userId = authData?.user?.id;
+
+    if(!userId){
+      alert("Conta criada! Verifique seu e-mail para confirmar o cadastro antes de entrar.");
+      navigate("/");
+      return;
+    }
+
+    const { error: dbError } = await db.from("usuario").insert({
+      id: userId,
       nome: nome,
       nome_usuario: usuario,
     });
 
-    if (error) {
-      alert("Erro ao criar a conta: " + error.message);
+    if (dbError) {
+      alert("Erro ao criar a conta: " + dbError.message);
+      console.error("Detalhes do erro:", dbError);
     } else {
+      socket.emit('novo_usuario', {
+        id: userId,
+        nome: nome,
+        nome_usuario: usuario,
+        data_cadastro: new Date().toISOString()
+      });
+      
       navigate("/feed");
     }
   }

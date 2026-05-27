@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+.container {
+  background-color: #29686a;
+}
+
+>>>>>>> bc0f445e6d39b969c81c4fb34b82a602c4edcf75
 .containerAtual {
   display: flex;
   justify-content: center;
