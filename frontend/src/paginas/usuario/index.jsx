@@ -1,40 +1,39 @@
-// url: https://ocyahlkdiheciktiqjdj.supabase.co
-
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { db } from "../../supabase.js";
 import styles from "./style.module.css";
-import foto_padrao from "../../assets/imagem/foto_padrao.png";
 
 function Usuario() {
+  const { nomeUsuario } = useParams();
+  const [perfil, setPerfil] = useState(null);
+
+  useEffect(() => {
+    buscarPerfil();
+  }, []);
+
+  async function buscarPerfil() {
+    const { data, error } = await db
+      .from("usuario")
+      .select("nome, nome_usuario, forma_contato")
+      .eq("nome_usuario", nomeUsuario)
+      .single();
+
+    if (error) {
+      alert("Usuário não encontrado!");
+    } else {
+      setPerfil(data);
+    }
+  }
+
+  if (!perfil) return <p className={styles.carregando}>Carregando...</p>;
+
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.containerAtual}>
-          <div className={styles.atual}>
-            <img src={foto_padrao} />
-            <label>nome do usuario</label>
-            <label>nome</label>
-            <label>forma de contato</label>
-            <label>senha atual</label>
-          </div>
-        </div>
-        <div className={styles.containerEditar}>
-          <div className={styles.editar}>
-            <img src={foto_padrao} />
-
-            <input placeholder="alterar nome de usuario (visível para outros usuários ao publicar)"></input>
-
-            <input placeholder="alterar nome"></input>
-
-            <input placeholder="adicionar forma de contato"></input>
-
-            <input placeholder="alterar senha"></input>
-
-            <input placeholder="digite novamente sua nova senha"></input>
-
-            <button>salvar alterações</button>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className={styles.container}>
+      <h1>@{perfil.nome_usuario}</h1>
+      <p>Nome: {perfil.nome}</p>
+      <p>Contato: {perfil.forma_contato || "não informado"}</p>
+    </div>
   );
 }
+
 export default Usuario;

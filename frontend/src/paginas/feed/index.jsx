@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { db } from "../../supabase.js";
@@ -11,6 +11,7 @@ const socket = io('projetoredes-production.up.railway.app', {
 function Feed() {
   const usuario = useNavigate();
   const [busca, setBusca] = useState("");
+  const [resultados, setResultados] = useState([]);
   const [conteudo, setConteudo] = useState("");
   const [post, setPost] = useState([]);
 
@@ -84,14 +85,49 @@ function Feed() {
     }
   }
 
+  async function buscarUsuario(texto) {
+    if (texto.trim() === "") {
+      setResultados([]);
+      return;
+    }
+    const { data } = await db
+      .from("usuario")
+      .select("nome_usuario")
+      .ilike("nome_usuario", `%${texto}%`)
+      .limit(5);
+
+    setResultados(data || []);
+  }
+
   return (
     <>
       <header>
         <nav>
-          <button type="button" onClick={() => usuario("/usuario")}>
+          <button type="button" onClick={() => usuario("/perfil")}>
             perfil
           </button>
-          <input type="text" placeholder="pesquise por nome de usuario" />
+          <div
+            className={styles.buscaUsuario}
+            onBlur={() => setTimeout(() => setResultados([]), 400)}
+          >
+            <input
+              type="text"
+              placeholder="pesquise por nome de usuario"
+              onChange={(e) => {
+                setBusca(e.target.value);
+                buscarUsuario(e.target.value);
+              }}
+            />
+            {resultados.length > 0 && (
+              <div className={styles.resultados}>
+                {resultados.map((u) => (
+                  <Link key={u.nome_usuario} to={`/usuario/${u.nome_usuario}`}>
+                    @{u.nome_usuario}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           <button type="button">notificações</button>
         </nav>
       </header>
@@ -111,7 +147,12 @@ function Feed() {
         <div className={styles.listaPosts}>
           {post.map((post) => (
             <div key={post.id} className={styles.post}>
-              <span className={styles.nomeUsuario}>@{post.nome_usuario}</span>
+              <Link
+                to={`/usuario/${post.nome_usuario}`}
+                className={styles.nomeUsuario}
+              >
+                @{post.nome_usuario}
+              </Link>
               <p className={styles.conteudo}>{post.conteudo}</p>
               <span className={styles.data}>
                 {new Date(post.data).toLocaleString("pt-BR")}

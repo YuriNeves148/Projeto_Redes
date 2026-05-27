@@ -27,6 +27,17 @@ nav {
     opacity: 0.8;
   }
 }
+.resultados {
+  background-color: #ddd;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin-left: 15px;
+  gap: 10px;
+  padding: 13px;
+  font-size: 19px;
+  border-radius: 10px;
+}
 
 .container {
   background-color: aquamarine;
