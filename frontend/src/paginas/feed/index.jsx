@@ -98,7 +98,7 @@ function Feed() {
   return (
     <>
       <header>
-        <nav>
+        <nav className={styles.barraNav}>
           <button type="button" onClick={() => usuario("/perfil")}>
             perfil
           </button>
@@ -124,7 +124,6 @@ function Feed() {
               </div>
             )}
           </div>
-          <button type="button">notificações</button>
         </nav>
       </header>
 
