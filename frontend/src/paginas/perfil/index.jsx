@@ -3,7 +3,7 @@ import foto_padrao from "../../assets/imagem/foto_padrao.png";
 import { useState, useEffect } from "react";
 import { db } from "../../supabase.js";
 import { Link, useNavigate } from "react-router-dom";
-import { socket } from '../../socket.js';
+import { socket } from "../../socket.js";
 
 function Perfil() {
   const [userId, setUserId] = useState(null);
@@ -41,9 +41,9 @@ function Perfil() {
     };
 
     const { error } = await db
-        .from("usuario")
-        .update(dadosAtualizados)
-        .eq("id", userId);
+      .from("usuario")
+      .update(dadosAtualizados)
+      .eq("id", userId);
 
     if (error) {
       alert("Erro ao salvar: " + error.message);
@@ -51,10 +51,10 @@ function Perfil() {
     }
 
     if (novoUsuario && novoUsuario !== dadosAtuais.nome_usuario) {
-      socket.emit('usuario_online', { nome_usuario: novoUsuario});
+      socket.emit("usuario_online", { nome_usuario: novoUsuario });
     }
 
-    socket.emit('atualizarPerfil', dadosAtualizados);
+    socket.emit("atualizarPerfil", dadosAtualizados);
 
     if (novaSenha !== "") {
       if (novaSenha !== confirmarSenha) {
@@ -88,7 +88,7 @@ function Perfil() {
 
   async function buscarDados(idUsuario) {
     const idBuscado = idUsuario || userId;
-    if(!idBuscado) return;
+    if (!idBuscado) return;
 
     const { data, error } = await db
       .from("usuario")
@@ -103,7 +103,7 @@ function Perfil() {
     }
   }
   async function uploadFoto(arquivo) {
-    if(!userId || !arquivo) return;
+    if (!userId || !arquivo) return;
 
     const extensao = arquivo.name.split(".").pop();
     const caminho = `${userId}.${extensao}`;
@@ -124,9 +124,9 @@ function Perfil() {
       .update({ foto_perfil: data.publicUrl })
       .eq("id", userId);
 
-    socket.emit('atualizarPerfil', {
+    socket.emit("atualizarPerfil", {
       ...dadosAtuais,
-      foto_perfil: data.publicUrl
+      foto_perfil: data.publicUrl,
     });
 
     alert("Foto atualizada!");
@@ -165,11 +165,6 @@ function Perfil() {
         </div>
         <div className={styles.containerEditar}>
           <div className={styles.editar}>
-<<<<<<< HEAD
-=======
-            <img src={dadosAtuais.foto_perfil || foto_padrao} alt="Preview" />
-
->>>>>>> bc0f445e6d39b969c81c4fb34b82a602c4edcf75
             <input
               value={novoUsuario}
               placeholder="alterar nome de usuario"
