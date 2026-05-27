@@ -19,7 +19,10 @@ function Usuario() {
     }
 
     socket.on('atualizar_lista_online', (usuariosConectadosMap) => {
+      console.log("Dicionário recebido do Railway:", usuariosConectadosMap);
       const listaNomesOnline = Object.values(usuariosConectadosMap);
+      console.log("Lista de nomes online extraída:", listaNomesOnline);
+      console.log("Nome de usuário que esta página busca (useParams):", nomeUsuario);
       setIsOnline(listaNomesOnline.includes(nomeUsuario));
     });
 
