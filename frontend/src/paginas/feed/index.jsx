@@ -2,11 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { db } from "../../supabase.js";
-import { io } from 'socket.io-client';
-
-const socket = io('projetoredes-production.up.railway.app', {
-  transports: ['websocket']
-});
+import { socket } from '../../socket.js'
 
 function Feed() {
   const usuario = useNavigate();

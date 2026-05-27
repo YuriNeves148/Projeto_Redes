@@ -2,11 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { db } from "../../supabase.js";
 import styles from "./style.module.css";
-import { io } from 'socket.io-client';
-
-const socket = io('projetoredes-production.up.railway.app', {
-  transports: ['websocket']
-});
+import { socket } from '../../socket.js'
 
 function Usuario() {
   const { nomeUsuario } = useParams();

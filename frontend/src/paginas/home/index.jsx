@@ -2,11 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { db } from "../../supabase.js";
 import styles from "./style.module.css";
 import { useEffect, useState } from "react";
-import { io } from 'socket.io-client';
-
-const socket = io('projetoredes-production.up.railway.app', {
-  transports: ['websocket']
-});
+import { socket } from '../../socket.js'
 
 function Home() {
   const feed = useNavigate();
@@ -38,7 +34,9 @@ function Home() {
 
     const user_name = perfilData?.nome_usuario;
 
-    socket.connect();
+    if(!socket.connected) {
+      socket.connect();
+    }
 
     socket.once('connect', () => {
       socket.emit('usuario_online', {

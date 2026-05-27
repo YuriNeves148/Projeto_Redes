@@ -2,11 +2,7 @@ import styles from "./style.module.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../supabase.js";
-import { io } from 'socket.io-client';
-
-const socket = io('projetoredes-production.up.railway.app', {
-  transports: ['websocket']
-});
+import { socket } from '../../socket.js'
 
 function Cadastro() {
   useEffect(() => {
