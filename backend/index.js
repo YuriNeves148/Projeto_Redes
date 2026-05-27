@@ -31,8 +31,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('usuario_online', (dados) => {
-        console.log(`Usuário logou: ${dados.email}`);
-        usuariosConectados[socket.id] = dados.id_usuario;
+        console.log(`Usuário logou: ${dados.nome_usuario}`);
+        usuariosConectados[socket.id] = dados.nome_usuario;
         io.emit('atualizar_lista_online', usuariosConectados);
     });
 
