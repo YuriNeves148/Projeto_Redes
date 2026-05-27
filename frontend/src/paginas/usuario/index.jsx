@@ -18,7 +18,9 @@ function Usuario() {
   }, [nomeUsuario]);
 
   useEffect(() => {
-    socket.connect();
+    if(!socket.connected) {
+      socket.connect();
+    }
 
     socket.on('atualizar_lista_online', (usuariosConectadosMap) => {
       const listaNomesOnline = Object.values(usuariosConectadosMap);
@@ -35,7 +37,6 @@ function Usuario() {
       socket.off('connect');
       socket.off('atualizar_lista_online');
       socket.off('atualizarPerfil');
-      socket.disconnect();
     };
   }, [nomeUsuario]);
 
