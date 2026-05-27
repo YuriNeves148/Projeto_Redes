@@ -115,10 +115,14 @@ function Perfil() {
         <div className={styles.containerAtual}>
           <div className={styles.atual}>
             <div
+              className={styles.troca_foto}
               onClick={() => document.getElementById("inputFoto").click()}
               style={{ cursor: "pointer" }}
             >
-              <img src={dadosAtuais.foto_perfil || foto_padrao} />
+              <img
+                src={dadosAtuais.foto_perfil || foto_padrao}
+                className={styles.foto_perfil}
+              />
               <p>clique para alterar</p>
             </div>
             <input
@@ -128,16 +132,15 @@ function Perfil() {
               style={{ display: "none" }}
               onChange={(e) => uploadFoto(e.target.files[0])}
             />
+
             <label>@{dadosAtuais.nome_usuario}</label>
+
             <label>{dadosAtuais.nome}</label>
             <label>{dadosAtuais.forma_contato}</label>
-            <label>senha oculta</label>
           </div>
         </div>
         <div className={styles.containerEditar}>
           <div className={styles.editar}>
-            <img src={foto_padrao} />
-
             <input
               value={novoUsuario}
               placeholder="alterar nome de usuario"

@@ -40,7 +40,7 @@ function Home() {
             name="senha"
             onChange={(e) => setSenha(e.target.value)}
           ></input>
-          <button type="button" name="entrar" onClick={entrar}>
+          <button type="button" onClick={entrar}>
             ENTRAR
           </button>
           <Link to="/cadastro">cadastre-se aqui</Link>

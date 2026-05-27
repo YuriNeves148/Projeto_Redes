@@ -96,7 +96,6 @@ function Feed() {
               </div>
             )}
           </div>
-          <button type="button">notificações</button>
         </nav>
       </header>
 
