@@ -10,11 +10,12 @@ function Home() {
   const [senha, setSenha] = useState("");
 
   async function entrar() {
-    const { data: authData, error } = await db.auth.signInWithPassword({
+    const { data: authData, error: authError } = await db.auth.signInWithPassword({
       email: email,
       password: senha,
     });
-    if (error) {
+    if (authError) {
+      console.error("Erro detalhado do Supabase Auth:", authError.message);
       alert("Email ou senha incorreto(s)");
       return;
     }
@@ -34,20 +35,24 @@ function Home() {
 
     const user_name = perfilData?.nome_usuario;
 
-    if(!socket.connected) {
-      socket.connect();
-    }
-
-    socket.once('connect', () => {
+    const enviarSinalOnline = () => {
       socket.emit('usuario_online', {
         nome_usuario: user_name,
         id_usuario: userId,
         email: email,
         entrou_em: new Date().toISOString()
       });
+      feed("/feed");
+    };
 
-    });
-    feed("/feed");
+    if(socket.connected){
+      enviarSinalOnline();
+    } else {
+      socket.connect();
+      socket.once('connect', () => {
+        enviarSinalOnline();
+      });
+    }
   }
 
   return (

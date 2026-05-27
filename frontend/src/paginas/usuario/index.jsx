@@ -14,17 +14,14 @@ function Usuario() {
   }, [nomeUsuario]);
 
   useEffect(() => {
-    if(!socket.connected) {
-      socket.connect();
+
+    const tratarListaOnline = (usuariosConectadosMap) => {
+      console.log("Dicionário recebido:", usuariosConectadosMap);
+      const listaNomesOnline = Object.values(usuariosConectadosMap);
+      setIsOnline(listaNomesOnline.includes(nomeUsuario));
     }
 
-    socket.on('atualizar_lista_online', (usuariosConectadosMap) => {
-      console.log("Dicionário recebido do Railway:", usuariosConectadosMap);
-      const listaNomesOnline = Object.values(usuariosConectadosMap);
-      console.log("Lista de nomes online extraída:", listaNomesOnline);
-      console.log("Nome de usuário que esta página busca (useParams):", nomeUsuario);
-      setIsOnline(listaNomesOnline.includes(nomeUsuario));
-    });
+    socket.on('atualizar_lista_online', tratarListaOnline);
 
     socket.on('atualizarPerfil', (dadosAtualizados) => {
       if(dadosAtualizados.nome_usuario === nomeUsuario){
@@ -32,9 +29,10 @@ function Usuario() {
       }
     });
 
+    socket.emit('pedir_lista_online');
+
     return () => {
-      socket.off('connect');
-      socket.off('atualizar_lista_online');
+      socket.off('atualizar_lista_online', tratarListaOnline);
       socket.off('atualizarPerfil');
     };
   }, [nomeUsuario]);

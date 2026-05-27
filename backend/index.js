@@ -38,6 +38,10 @@ io.on('connection', (socket) => {
         io.emit('atualizar_lista_online', usuariosConectados);
     });
 
+    socket.on('pedir_lista_online', () => {
+        socket.emit('atualizar_lista_online', usuariosConectados);
+    });
+
     socket.on('disconnect', () => {
         console.log(`Usuario desconectado: ${socket.id}`);
         if (usuariosConectados[socket.id]){
