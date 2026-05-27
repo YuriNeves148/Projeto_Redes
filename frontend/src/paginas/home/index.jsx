@@ -47,8 +47,9 @@ function Home() {
         email: email,
         entrou_em: new Date().toISOString()
       });
-      feed("/feed");
+
     });
+    feed("/feed");
   }
 
   return (

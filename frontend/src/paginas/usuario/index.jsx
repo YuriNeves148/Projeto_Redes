@@ -20,10 +20,6 @@ function Usuario() {
   useEffect(() => {
     socket.connect();
 
-    socket.on('connect', () => {
-      socket.emit('usuario_online', { nome_usuario: nomeUsuario });
-    });
-
     socket.on('atualizar_lista_online', (usuariosConectadosMap) => {
       const listaNomesOnline = Object.values(usuariosConectadosMap);
       setIsOnline(listaNomesOnline.includes(nomeUsuario));
