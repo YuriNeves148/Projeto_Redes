@@ -23,7 +23,7 @@ A aplicação permite que usuários criem publicações, que ficam visíveis par
 
 ```
 Projeto_Redes/
-├── backend/      # Lógica do servidor e regras de negócio
+├── backend/      # Lógica do servidor
 ├── frontend/     # Interface da aplicação (React)
 ├── .idea/        # Configurações do ambiente de desenvolvimento
 └── package.json  # Dependências do projeto
